@@ -31,6 +31,15 @@ class PerinkpheralConfigFlow(ConfigFlow, domain=DOMAIN):
     async def async_step_zeroconf(self, discovery_info):
         """A display announced itself on the network: its address is filled in."""
         self._found_device = str(discovery_info.host)
+        # A display that has a screen already - added by hand, or found before -
+        # is not offered again, under whichever of its names it was given.
+        names = {self._found_device, discovery_info.hostname.rstrip(".").lower(),
+                 discovery_info.hostname.rstrip(".").lower().removesuffix(".local")}
+        for entry in self._async_current_entries():
+            device = entry.data.get(CONF_DEVICE, "").lower()
+            device = device.split("://")[-1].rstrip("/")
+            if device in names or device.removesuffix(".local") in names:
+                return self.async_abort(reason="already_configured")
         await self.async_set_unique_id(discovery_info.hostname)
         self._abort_if_unique_id_configured()
         self.context["title_placeholders"] = {"name": discovery_info.hostname.rstrip(".")}

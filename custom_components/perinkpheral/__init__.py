@@ -27,6 +27,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         hass.data[VIEW_IS_UP] = True
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     entry.async_on_unload(entry.add_update_listener(_changed))
+    # Only now is there a screen to give: the display, told while the screen
+    # was being added, asked at once and was not known yet. It is told again,
+    # and after every start of Home Assistant shows what is true now.
+    hass.async_create_task(tell_the_display(hass, entry))
     return True
 
 
