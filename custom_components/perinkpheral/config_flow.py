@@ -126,6 +126,8 @@ class PerinkpheralOptionsFlow(OptionsFlow):
             fields[vol.Optional(slot + "_entity")] = selector.EntitySelector()
             if slot != "hero" and not slot.startswith("detail"):
                 fields[vol.Optional(slot + "_label")] = selector.TextSelector()
+            if slot != "hero":
+                fields[vol.Optional(slot + "_unit")] = selector.TextSelector()
             if self._layout != LAYOUT_LIST:
                 fields[vol.Optional(slot + "_picture", default=PICTURE_AUTO)] = (
                     selector.SelectSelector(selector.SelectSelectorConfig(

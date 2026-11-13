@@ -49,8 +49,9 @@ On the display: install **HA Companion** (version 0.2.0 or later) from its page.
 2. **Configure** on the integration's card, as often as you like: the layout first - it
    can be changed, and what was put into another layout's places is kept - then an entity
    for each place, a name where the layout shows one, a picture (Automatic takes it from
-   what kind of sensor it is). An empty place is left out. The display shows the change at
-   once.
+   what kind of sensor it is). An empty place is left out. A **unit** may be
+   written for a place where the entity's own does not fit - or a dash, for none. The
+   display shows the change at once.
 
 What you get in Home Assistant: a sensor with the screen's text, to look at, and a
 **refresh** button that makes the display ask now. Left alone, the display asks at the

@@ -61,7 +61,21 @@ def joined(value, unit):
     """A value with its unit in one piece: "22.8°", "34%", "228 V"."""
     if value == NOTHING or not unit:
         return value
-    return value + unit if unit in (DEGREE, "%") else "%s %s" % (value, unit)
+    # A unit of one character stands against the number; a longer one after a space.
+    return value + unit if len(unit) == 1 else "%s %s" % (value, unit)
+
+
+NO_UNIT = "-"
+UNIT_MAX = 8
+
+
+def unit_wanted(own, chosen):
+    """The unit a place shows: the entity's own, unless the user wrote another - or a
+    dash, for none - where the entity's is too long for the place or simply wrong."""
+    chosen = (chosen or "").strip()
+    if not chosen:
+        return own
+    return "" if chosen == NO_UNIT else ascii_only(chosen)[:UNIT_MAX]
 
 
 def picture_of(state, chosen):
@@ -86,7 +100,7 @@ def name_of(state, entity_id, label):
 
 def render(layout, options, state_of):
     """The lines of the screen. `options` holds, for every place, `<place>_entity`,
-    `<place>_label` and `<place>_picture`; `state_of(entity_id)` gives a state or None."""
+    `<place>_label`, `<place>_unit` and `<place>_picture`; `state_of(entity_id)` gives a state or None."""
     lines = [] if layout == LAYOUT_HERO else ["layout|" + layout]
     for slot in SLOTS[layout]:
         entity_id = options.get(slot + "_entity")
@@ -94,6 +108,7 @@ def render(layout, options, state_of):
             continue
         state = state_of(entity_id)
         value, unit = value_and_unit(state)
+        unit = unit_wanted(unit, options.get(slot + "_unit"))
         picture = "" if layout == LAYOUT_LIST else picture_of(state, options.get(slot + "_picture"))
         name = name_of(state, entity_id, options.get(slot + "_label"))
         if slot == "hero":

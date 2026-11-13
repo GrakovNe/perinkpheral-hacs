@@ -65,7 +65,7 @@ check(render("hero", {
     "detail|850|ppm|co2",
     "column|Room|thermometer|22.9°",   # 22.85 as a float is a hair above
     "column|Fridge||--",                      # what is not available has no unit either
-    "column|Input||228 V",
+    "column|Input||228V",                     # one character of unit stands against the number
 ]))
 
 check(render("tiles", {
@@ -81,6 +81,12 @@ check(render("tiles", {
 ]))
 
 check(render("hero", {"hero_entity": "sensor.room"}, STATES.get), "hero|23°|thermometer")
+# the user's own unit where the entity's does not fit, or none at all
+check(render("tiles", {"tile_1_entity": "sensor.co2", "tile_1_label": "CO2", "tile_1_unit": "-",
+                       "tile_2_entity": "sensor.input", "tile_2_label": "In", "tile_2_unit": "volt",
+                       "tile_3_entity": "sensor.room", "tile_3_label": "Room", "tile_3_unit": " "},
+             STATES.get),
+      "layout|tiles\nitem|CO2|co2|850\nitem|In|plug|228 volt\nitem|Room|thermometer|22.9\u00b0")
 check(render("single", {"value_entity": "sensor.gone", "value_label": "a|b"}, STATES.get),
       "layout|single\nitem|a/b||--")
 check(render("list", {"row_1_entity": "sensor.humidity", "row_1_label": "Humidity",
