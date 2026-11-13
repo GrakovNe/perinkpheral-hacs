@@ -70,13 +70,13 @@ check(render("hero", {
 
 check(render("tiles", {
     "tile_1_entity": "sensor.room",
-    "tile_2_entity": "sensor.co2",                # a name that is not ASCII: the entity's own
+    "tile_2_entity": "sensor.co2",                # a name in another script goes as it is
     "tile_4_entity": "binary_sensor.door",        # the third place is empty
     "tile_4_picture": "door",
 }, STATES.get), "\n".join([
     "layout|tiles",
     "item|Room temperature|thermometer|22.9°",
-    "item|Co2|co2|850ppm",
+    "item|Углекислый газ|co2|850ppm",
     "item|Front door|door|off",
 ]))
 

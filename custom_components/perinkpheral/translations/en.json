@@ -38,7 +38,7 @@
       },
       "places": {
         "title": "What the screen shows",
-        "description": "Choose an entity for each place. An empty place is left out. Names are shown in ASCII only. Unit: empty takes the entity's own; write another where it does not fit, or a dash for none.",
+        "description": "Choose an entity for each place. An empty place is left out. Unit: empty takes the entity's own; write another where it does not fit, or a dash for none.",
         "data": {
           "hero_entity": "Main value",
           "hero_label": "Main value: name",

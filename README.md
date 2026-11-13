@@ -57,8 +57,9 @@ What you get in Home Assistant: a sensor with the screen's text, to look at, and
 **refresh** button that makes the display ask now. Left alone, the display asks at the
 pace set in HA Companion's settings.
 
-The names on the display are ASCII: a name in another script is replaced by the entity's
-own id unless you type one.
+Names go to the display as they are. It draws the letters it has glyphs for - Latin with
+marks, Cyrillic and Greek are packs added on its page (Settings, Language) - and spells
+the rest in Latin letters.
 
 ## By hand
 

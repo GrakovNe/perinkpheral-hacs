@@ -21,9 +21,11 @@ PICTURE_OF_CLASS = {
 PICTURE_OF_DOMAIN = {"light": "bulb", "binary_sensor": "door", "media_player": "play"}
 
 
-def ascii_only(text):
-    """The device's fonts are ASCII; the degree sign is the one thing it draws besides."""
-    return "".join(character if " " <= character <= "~" or character == DEGREE else "?"
+def plain(text):
+    """A text as the display takes it: one line, and no "|", which parts a line. The
+    display draws the letters it has glyphs for - Latin with marks, Cyrillic, Greek, when
+    their packs are installed - and spells the rest in Latin ones."""
+    return "".join(character if character >= " " and character != "\x7f" else " "
                    for character in str(text)).replace("|", "/")
 
 
@@ -53,8 +55,8 @@ def value_and_unit(state):
     try:
         value = number_text(float(state.state))
     except (TypeError, ValueError):
-        return ascii_only(state.state), ""
-    return value, DEGREE if unit in TEMPERATURE_UNITS else ascii_only(unit)
+        return plain(state.state), ""
+    return value, DEGREE if unit in TEMPERATURE_UNITS else plain(unit)
 
 
 def joined(value, unit):
@@ -75,7 +77,7 @@ def unit_wanted(own, chosen):
     chosen = (chosen or "").strip()
     if not chosen:
         return own
-    return "" if chosen == NO_UNIT else ascii_only(chosen)[:UNIT_MAX]
+    return "" if chosen == NO_UNIT else plain(chosen)[:UNIT_MAX]
 
 
 def picture_of(state, chosen):
@@ -84,17 +86,17 @@ def picture_of(state, chosen):
     if state is None:
         return ""
     if state.entity_id.startswith("weather."):
-        return ascii_only(state.state)  # the device knows the states of weather by name
+        return plain(state.state)  # the device knows the states of weather by name
     found = PICTURE_OF_CLASS.get(state.attributes.get("device_class"))
     return found or PICTURE_OF_DOMAIN.get(state.entity_id.split(".")[0], "")
 
 
 def name_of(state, entity_id, label):
     if label:
-        return ascii_only(label)[:NAME_MAX]
+        return plain(label)[:NAME_MAX]
     friendly = state.attributes.get("friendly_name") if state is not None else None
-    if friendly and all(" " <= character <= "~" for character in friendly):
-        return friendly[:NAME_MAX]
+    if friendly:
+        return plain(friendly)[:NAME_MAX]
     return entity_id.split(".")[-1].replace("_", " ").capitalize()[:NAME_MAX]
 
 
