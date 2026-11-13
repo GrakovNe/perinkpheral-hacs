@@ -1,3 +1,5 @@
+<img src="https://raw.githubusercontent.com/GrakovNe/perinkpheral/main/assets/mark/mark-on-paper-512.png" width="96" alt="The perINKpheral mark">
+
 # perINKpheral for Home Assistant
 
 Screens for the [perINKpheral](https://github.com/GrakovNe/perinkpheral) desk display, put
