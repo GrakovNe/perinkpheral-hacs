@@ -76,7 +76,7 @@ check(render("tiles", {
 }, STATES.get), "\n".join([
     "layout|tiles",
     "item|Room temperature|thermometer|22.9°",
-    "item|Co2|co2|850 ppm",
+    "item|Co2|co2|850ppm",
     "item|Front door|door|off",
 ]))
 
@@ -86,7 +86,7 @@ check(render("tiles", {"tile_1_entity": "sensor.co2", "tile_1_label": "CO2", "ti
                        "tile_2_entity": "sensor.input", "tile_2_label": "In", "tile_2_unit": "volt",
                        "tile_3_entity": "sensor.room", "tile_3_label": "Room", "tile_3_unit": " "},
              STATES.get),
-      "layout|tiles\nitem|CO2|co2|850\nitem|In|plug|228 volt\nitem|Room|thermometer|22.9\u00b0")
+      "layout|tiles\nitem|CO2|co2|850\nitem|In|plug|228volt\nitem|Room|thermometer|22.9\u00b0")
 check(render("single", {"value_entity": "sensor.gone", "value_label": "a|b"}, STATES.get),
       "layout|single\nitem|a/b||--")
 check(render("list", {"row_1_entity": "sensor.humidity", "row_1_label": "Humidity",

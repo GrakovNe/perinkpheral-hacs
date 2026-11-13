@@ -58,11 +58,11 @@ def value_and_unit(state):
 
 
 def joined(value, unit):
-    """A value with its unit in one piece: "22.8°", "34%", "228 V"."""
+    """A value with its unit in one piece: "22.8°", "34%", "228V", "850ppm"."""
     if value == NOTHING or not unit:
         return value
-    # A unit of one character stands against the number; a longer one after a space.
-    return value + unit if len(unit) == 1 else "%s %s" % (value, unit)
+    # Every unit stands against its number, long or short: the same everywhere.
+    return value + unit
 
 
 NO_UNIT = "-"
