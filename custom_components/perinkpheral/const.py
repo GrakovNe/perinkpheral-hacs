@@ -33,6 +33,13 @@ PICTURES = [
     "clock", "check", "warning", "info", "play",
 ]
 
+
+
+def layout_of(entry):
+    """The screen's layout: the one it was made with, until another is chosen for it."""
+    return entry.options.get(CONF_LAYOUT) or entry.data.get(CONF_LAYOUT, LAYOUT_HERO)
+
+
 # What the device keeps of a screen, in bytes.
 SCREEN_MAX_BYTES = 1000
 NAME_MAX = 23

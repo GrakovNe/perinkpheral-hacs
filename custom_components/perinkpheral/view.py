@@ -7,7 +7,7 @@ from aiohttp import web
 from homeassistant.components.http import HomeAssistantView
 from homeassistant.core import HomeAssistant
 
-from .const import CONF_LAYOUT, CONF_SECRET, DOMAIN, LAYOUT_HERO, SCREEN_PATH
+from .const import CONF_SECRET, DOMAIN, SCREEN_PATH, layout_of
 from .render import render
 
 BEARER = "Bearer "
@@ -30,7 +30,6 @@ class ScreenView(HomeAssistantView):
         for entry in self._hass.config_entries.async_entries(DOMAIN):
             secret = entry.data.get(CONF_SECRET, "")
             if secret and shown and hmac.compare_digest(secret.encode(), shown.encode()):
-                screen = render(entry.data.get(CONF_LAYOUT, LAYOUT_HERO), entry.options,
-                                self._hass.states.get)
+                screen = render(layout_of(entry), entry.options, self._hass.states.get)
                 return web.Response(text=screen, content_type="text/plain", charset="utf-8")
         return web.Response(status=401, text="Unknown display.")

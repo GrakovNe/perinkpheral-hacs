@@ -29,6 +29,13 @@
   "options": {
     "step": {
       "init": {
+        "title": "The screen's layout",
+        "description": "What was put into another layout's places is kept for when it is chosen again.",
+        "data": {
+          "layout": "Layout"
+        }
+      },
+      "places": {
         "title": "What the screen shows",
         "description": "Choose an entity for each place. An empty place is left out. Names are shown in ASCII only.",
         "data": {

@@ -11,7 +11,8 @@ from homeassistant.helpers import selector
 from homeassistant.helpers.network import NoURLAvailableError, get_url
 
 from .const import (CONF_DEVICE, CONF_LAYOUT, CONF_SECRET, CONF_URL, DOMAIN, LAYOUT_HERO,
-                    LAYOUT_LIST, LAYOUT_SINGLE, LAYOUT_TILES, PICTURE_AUTO, PICTURES, SLOTS)
+                    LAYOUT_LIST, LAYOUT_SINGLE, LAYOUT_TILES, PICTURE_AUTO, PICTURES, SLOTS,
+                    layout_of)
 from .device import DeviceError, push_settings
 
 CONF_NAME = "name"
@@ -91,23 +92,43 @@ class PerinkpheralConfigFlow(ConfigFlow, domain=DOMAIN):
 
 
 class PerinkpheralOptionsFlow(OptionsFlow):
-    """What stands in the places of the screen's layout."""
+    """Changing a screen: its layout first, then what stands in the layout's places.
+    What was put into the places of another layout is kept for when it is chosen again."""
+
+    def __init__(self) -> None:
+        self._layout = LAYOUT_HERO
 
     async def async_step_init(self, user_input=None):
         if user_input is not None:
+            self._layout = user_input[CONF_LAYOUT]
+            return await self.async_step_places()
+        schema = vol.Schema({
+            vol.Required(CONF_LAYOUT, default=layout_of(self.config_entry)):
+                selector.SelectSelector(selector.SelectSelectorConfig(
+                    options=LAYOUTS, translation_key=CONF_LAYOUT,
+                    mode=selector.SelectSelectorMode.LIST)),
+        })
+        return self.async_show_form(step_id="init", data_schema=schema)
+
+    async def async_step_places(self, user_input=None):
+        slots = SLOTS[self._layout]
+        if user_input is not None:
             # A field that was cleared is not in the answer at all: the place is empty.
-            return self.async_create_entry(title="", data=user_input)
-        layout = self.config_entry.data.get(CONF_LAYOUT, LAYOUT_HERO)
+            of_this_layout = tuple(slot + "_" for slot in slots)
+            kept = {key: value for key, value in self.config_entry.options.items()
+                    if not key.startswith(of_this_layout)}
+            return self.async_create_entry(
+                title="", data={**kept, **user_input, CONF_LAYOUT: self._layout})
         fields = {}
-        for slot in SLOTS[layout]:
+        for slot in slots:
             fields[vol.Optional(slot + "_entity")] = selector.EntitySelector()
             if slot != "hero" and not slot.startswith("detail"):
                 fields[vol.Optional(slot + "_label")] = selector.TextSelector()
-            if layout != LAYOUT_LIST:
+            if self._layout != LAYOUT_LIST:
                 fields[vol.Optional(slot + "_picture", default=PICTURE_AUTO)] = (
                     selector.SelectSelector(selector.SelectSelectorConfig(
                         options=PICTURES, translation_key="picture",
                         mode=selector.SelectSelectorMode.DROPDOWN)))
         schema = self.add_suggested_values_to_schema(vol.Schema(fields),
                                                      self.config_entry.options)
-        return self.async_show_form(step_id="init", data_schema=schema)
+        return self.async_show_form(step_id="places", data_schema=schema)

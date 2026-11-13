@@ -6,7 +6,7 @@ from homeassistant.core import Event, HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.event import async_track_state_change_event
 
-from .const import CONF_LAYOUT, LAYOUT_HERO, SLOTS
+from .const import SLOTS, layout_of
 from .render import render
 
 
@@ -31,7 +31,7 @@ class ScreenSensor(SensorEntity):
 
     @property
     def _layout(self) -> str:
-        return self._entry.data.get(CONF_LAYOUT, LAYOUT_HERO)
+        return layout_of(self._entry)
 
     @property
     def _entities(self) -> list[str]:
