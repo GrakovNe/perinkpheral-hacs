@@ -53,6 +53,5 @@ async def tell_the_display(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
 
 async def _changed(hass: HomeAssistant, entry: ConfigEntry) -> None:
-    """The places were changed: the sensor is made anew, and the display shows them."""
+    """The places were changed: the screen is set up anew, which tells the display."""
     await hass.config_entries.async_reload(entry.entry_id)
-    await tell_the_display(hass, entry)

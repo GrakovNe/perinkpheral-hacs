@@ -20,7 +20,8 @@
     "error": {
       "cannot_connect": "The display did not answer.",
       "app_missing": "Install HA Companion on the display first.",
-      "refused": "The display did not take the settings."
+      "refused": "The display did not take the settings.",
+      "url_required": "Give this Home Assistant's address, with http or https."
     },
     "abort": {
       "already_configured": "This display is already set up."

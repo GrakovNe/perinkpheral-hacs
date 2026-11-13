@@ -6,7 +6,7 @@ from homeassistant.core import Event, HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.event import async_track_state_change_event
 
-from .const import SLOTS, layout_of
+from .const import SLOTS, device_of, layout_of
 from .render import render
 
 
@@ -27,6 +27,7 @@ class ScreenSensor(SensorEntity):
         self._entry = entry
         self._attr_name = entry.title
         self._attr_unique_id = entry.entry_id
+        self._attr_device_info = device_of(entry)
         self._screen = ""
 
     @property

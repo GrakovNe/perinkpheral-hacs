@@ -35,6 +35,13 @@ def number_text(value):
     return text[:-2] if text.endswith(".0") else text
 
 
+def whole_number(text):
+    try:
+        return "%d" % round(float(text))
+    except ValueError:
+        return text
+
+
 def value_and_unit(state):
     """What an entity shows: its value and, apart, the unit it is in."""
     if state is None or str(state.state).lower() in UNAVAILABLE:
@@ -91,7 +98,7 @@ def render(layout, options, state_of):
         name = name_of(state, entity_id, options.get(slot + "_label"))
         if slot == "hero":
             # Two characters are the largest the device has: a whole number.
-            whole = value.split(".")[0] if unit == DEGREE else value
+            whole = whole_number(value) if unit == DEGREE else value
             lines.append("hero|%s|%s" % (joined(whole, unit if unit == DEGREE else ""), picture))
         elif slot.startswith("detail"):
             lines.append("detail|%s|%s|%s" % (joined(value, unit if unit == DEGREE else ""),

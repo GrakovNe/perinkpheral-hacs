@@ -29,13 +29,14 @@ async def push_settings(hass: HomeAssistant, device: str, url: str, secret: str)
     address = device if "://" in device else "http://" + device
     try:
         async with asyncio.timeout(TIMEOUT_S):
-            answer = await async_get_clientsession(hass).post(
-                "%s/api/apps/settings?app=%s" % (address.rstrip("/"), DEVICE_APP),
-                json={"server": url.rstrip("/"), "token": secret, "entity": ""})
-            text = await answer.text()
+            async with async_get_clientsession(hass).post(
+                    "%s/api/apps/settings?app=%s" % (address.rstrip("/"), DEVICE_APP),
+                    json={"server": url.rstrip("/"), "token": secret, "entity": ""}) as answer:
+                status = answer.status
+                await answer.read()
     except (aiohttp.ClientError, asyncio.TimeoutError, OSError) as failure:
         raise DeviceError("cannot_connect") from failure
-    if answer.status == 404 or "installed" in text.lower():
+    if status == 404:
         raise DeviceError("app_missing")
-    if answer.status != 200:
+    if status != 200:
         raise DeviceError("refused")

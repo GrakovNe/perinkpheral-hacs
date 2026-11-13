@@ -7,7 +7,7 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from . import tell_the_display
-from .const import CONF_DEVICE
+from .const import CONF_DEVICE, device_of
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry,
@@ -23,6 +23,7 @@ class RefreshButton(ButtonEntity):
         self._entry = entry
         self._attr_name = entry.title + " refresh"
         self._attr_unique_id = entry.entry_id + "_refresh"
+        self._attr_device_info = device_of(entry)
 
     async def async_press(self) -> None:
         if not await tell_the_display(self.hass, self._entry):

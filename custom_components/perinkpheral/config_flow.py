@@ -61,7 +61,9 @@ class PerinkpheralConfigFlow(ConfigFlow, domain=DOMAIN):
                 CONF_URL: user_input.get(CONF_URL, "").strip(),
                 CONF_SECRET: secrets.token_urlsafe(SECRET_BYTES),
             }
-            if data[CONF_DEVICE]:
+            if data[CONF_DEVICE] and not data[CONF_URL].startswith(("http://", "https://")):
+                errors["base"] = "url_required"
+            elif data[CONF_DEVICE]:
                 try:
                     await push_settings(self.hass, data[CONF_DEVICE], data[CONF_URL],
                                         data[CONF_SECRET])

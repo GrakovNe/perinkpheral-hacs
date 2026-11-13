@@ -40,6 +40,16 @@ def layout_of(entry):
     return entry.options.get(CONF_LAYOUT) or entry.data.get(CONF_LAYOUT, LAYOUT_HERO)
 
 
+def device_of(entry):
+    """The display as Home Assistant lists it: what the screen's entities belong to."""
+    device = entry.data.get(CONF_DEVICE)
+    described = {"identifiers": {(DOMAIN, entry.entry_id)}, "name": entry.title,
+                 "manufacturer": "perINKpheral", "model": "Desk display"}
+    if device:
+        described["configuration_url"] = device if "://" in device else "http://" + device
+    return described
+
+
 # What the device keeps of a screen, in bytes.
 SCREEN_MAX_BYTES = 1000
 NAME_MAX = 23

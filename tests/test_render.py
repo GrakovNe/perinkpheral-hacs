@@ -80,6 +80,7 @@ check(render("tiles", {
     "item|Front door|door|off",
 ]))
 
+check(render("hero", {"hero_entity": "sensor.room"}, STATES.get), "hero|23°|thermometer")
 check(render("single", {"value_entity": "sensor.gone", "value_label": "a|b"}, STATES.get),
       "layout|single\nitem|a/b||--")
 check(render("list", {"row_1_entity": "sensor.humidity", "row_1_label": "Humidity",

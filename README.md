@@ -4,10 +4,10 @@ Screens for the [perINKpheral](https://github.com/GrakovNe/perinkpheral) desk di
 together in Home Assistant's own interface: choose a layout, put entities into its places.
 No YAML, no templates, and no token to copy: the integration sets the display up itself.
 
-**Status: written and not yet run inside a Home Assistant.** What is tested: the text of a
-screen (`tests/test_render.py`), and the display's half - HA Companion asking an address
-that answers as this integration does. The forms, the sensor, the button and the address
-itself have not run. Tell us what breaks.
+**Status: 0.3.0, the first release.** It runs in the author's Home Assistant (2026.10):
+adding a screen, the forms, the sensor, the display set up from here. Newer than that
+run, and not yet seen there: the display's entry in the list of devices, the icon. Tell us
+what breaks.
 
 ## Install and set up
 
