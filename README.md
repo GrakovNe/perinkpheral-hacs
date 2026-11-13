@@ -9,23 +9,32 @@ screen (`tests/test_render.py`), and the display's half - HA Companion asking an
 that answers as this integration does. The forms, the sensor, the button and the address
 itself have not run. Tell us what breaks.
 
-## Install
+## Install and set up
 
-[![Add the repository to HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=GrakovNe&repository=perinkpheral-hacs&category=integration)
+Four steps, in this order. The second button works only after the third step: before it
+Home Assistant does not know the integration and says it "does not support configuration".
 
-The button adds this repository to HACS; install **perINKpheral** there and restart Home
-Assistant. Without HACS: copy `custom_components/perinkpheral` into the
-`custom_components` folder of the configuration and restart.
+1. **Add the repository to HACS:**
+
+   [![Add the repository to HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=GrakovNe&repository=perinkpheral-hacs&category=integration)
+
+2. **Download it.** The button only adds the repository to HACS's list: on the page it
+   opens, press **Download**.
+3. **Restart Home Assistant** (Settings - System - Restart).
+4. **Add the integration:**
+
+   [![Add the integration](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=perinkpheral)
+
+Without HACS, instead of steps 1 and 2: copy `custom_components/perinkpheral` into the
+`custom_components` folder of the configuration.
 
 On the display: install **HA Companion** (version 0.2.0 or later) from its page.
 
-## Set up
+### A screen
 
-[![Add the integration](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=perinkpheral)
-
-1. **A screen**: its name, its layout, the display's address (`192.168.1.70`, or
-   `perinkpheral.local`; a display on the network is offered by itself) and this Home
-   Assistant's address as the display reaches it.
+1. In the form of step 4: the screen's name, its layout, the display's address
+   (`192.168.1.70`, or `perinkpheral.local`; a display on the network is offered by itself)
+   and this Home Assistant's address as the display reaches it.
 
    | Layout | What it is |
    |---|---|
