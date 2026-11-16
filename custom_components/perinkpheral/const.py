@@ -51,5 +51,5 @@ def device_of(entry):
 
 
 # What the device keeps of a screen, in bytes.
-SCREEN_MAX_BYTES = 1000
+SCREEN_MAX_BYTES = 512
 NAME_MAX = 23

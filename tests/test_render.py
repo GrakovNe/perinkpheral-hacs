@@ -98,7 +98,7 @@ check(render("list", {}, STATES.get), "layout|list")
 many = {"row_%d_entity" % n: "sensor.room" for n in range(1, 9)}
 many.update({"row_%d_label" % n: "x" * 200 for n in range(1, 9)})
 long_screen = render("list", many, STATES.get)
-check(len(long_screen.encode()) <= 1000 and long_screen.count("\n") == 8, True)
+check(len(long_screen.encode()) <= 512 and long_screen.count("\n") == 8, True)
 
 print("%d failed" % failed)
 sys.exit(1 if failed else 0)
