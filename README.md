@@ -63,11 +63,8 @@ Names go to the display as they are. It draws the letters it has glyphs for - La
 marks, Cyrillic and Greek are packs added on its page (Settings, Language) - and spells
 the rest in Latin letters.
 
-## By hand
-
-Leave the display's address empty and the integration only makes the sensor. In HA
-Companion's settings on the display's page give the server, a long-lived access token and,
-as Sensor, `sensor.<the screen's name>`.
+The display's address is what lets the integration set HA Companion up: the server and the
+token are not on the display's page. Without it the integration only makes the sensor.
 
 ## How it talks
 
