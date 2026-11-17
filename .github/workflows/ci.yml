@@ -1,0 +1,90 @@
+# Every push and pull request: the test of the screens, Home Assistant's own check of an
+# integration (hassfest) and HACS's of a repository, and the integration's archive as the
+# run's artifact.
+#
+# Every push to main is a release, once that passes: the next version - the manifest's, or the
+# last release's with its patch one up, whichever is greater - written into the archive's
+# manifest, which HACS installs (zip_release in hacs.json). Its notes are the commits since the
+# release before.
+
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      - name: The screens
+        run: python3 tests/test_render.py
+      - name: hassfest
+        uses: home-assistant/actions/hassfest@master
+
+  hacs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: HACS
+        uses: hacs/action@main
+        with:
+          category: integration
+          ignore: brands
+
+  build:
+    needs: [tests, hacs]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Version
+        id: version
+        run: |
+          manifest=custom_components/perinkpheral/manifest.json
+          base=$(jq -r .version "$manifest")
+          last=$(git tag -l 'v[0-9]*' --sort=-v:refname | head -1 | sed 's/^v//')
+          next=$base
+          if [ -n "$last" ]; then
+            IFS=. read -r major minor patch <<< "$last"
+            next=$(printf '%s\n%s\n' "$base" "$major.$minor.$((patch + 1))" | sort -V | tail -1)
+          fi
+          build="$next-${GITHUB_SHA::7}"
+          release=false
+          if [ "$GITHUB_EVENT_NAME" = push ] && [ "$GITHUB_REF" = refs/heads/main ]; then
+            build=$next
+            release=true
+          fi
+          jq --arg version "$build" '.version = $version' "$manifest" > manifest.json && mv manifest.json "$manifest"
+          echo "next=$next" >> "$GITHUB_OUTPUT"
+          echo "release=$release" >> "$GITHUB_OUTPUT"
+          echo "last=$last" >> "$GITHUB_OUTPUT"
+      - name: The archive
+        # What HACS unpacks into custom_components/perinkpheral
+        run: (cd custom_components/perinkpheral && zip -qr "$GITHUB_WORKSPACE/perinkpheral.zip" . -x '__pycache__/*' '*.pyc')
+      - uses: actions/upload-artifact@v4
+        with:
+          name: perinkpheral
+          path: perinkpheral.zip
+      - name: Release
+        if: steps.version.outputs.release == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.next }}
+          LAST: ${{ steps.version.outputs.last }}
+        run: |
+          git log --no-merges --format='- %s' ${LAST:+v$LAST..}HEAD > notes.md
+          gh release create "v$VERSION" perinkpheral.zip --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" --title "$VERSION" --notes-file notes.md
