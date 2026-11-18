@@ -28,6 +28,11 @@ class PerinkpheralConfigFlow(ConfigFlow, domain=DOMAIN):
 
     def __init__(self) -> None:
         self._found_device = ""
+        self._pairing_device = ""
+
+    def is_matching(self, other_flow):
+        """Only a submitted pairing reserves the address, not an idle form."""
+        return bool(self._pairing_device and self._pairing_device == other_flow._pairing_device)
 
     async def async_step_zeroconf(self, discovery_info):
         """A display announced itself on the network: its address is filled in."""
@@ -65,11 +70,22 @@ class PerinkpheralConfigFlow(ConfigFlow, domain=DOMAIN):
             if data[CONF_DEVICE] and not data[CONF_URL].startswith(("http://", "https://")):
                 errors["base"] = "url_required"
             elif data[CONF_DEVICE]:
+                self._pairing_device = device_key(device)
+                if self.hass.config_entries.flow.async_has_matching_flow(self):
+                    self._pairing_device = ""
+                    return self.async_abort(reason="already_configured")
+                paired = False
                 try:
                     await push_settings(self.hass, data[CONF_DEVICE], data[CONF_URL],
                                         data[CONF_SECRET])
+                    paired = True
                 except DeviceError as failure:
                     errors["base"] = str(failure)
+                finally:
+                    # A successful flow owns the address until HA registers its entry.
+                    # Failed and canceled requests must leave it available for retry.
+                    if not paired:
+                        self._pairing_device = ""
             if not errors:
                 return self.async_create_entry(title=user_input[CONF_NAME], data=data)
         given = user_input or {}
