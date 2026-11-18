@@ -5,7 +5,7 @@
 Home Assistant integration for [perINKpheral](https://perinkpheral.dev).
 Configures display layouts and entities for the HA Companion application.
 
-[Device setup](https://perinkpheral.dev/start) -
+[Device setup](https://perinkpheral.dev/setup) -
 [Application catalog](https://github.com/GrakovNe/perinkpheral-apps/tree/main/catalog).
 
 ## Installation
@@ -23,6 +23,12 @@ Requires Home Assistant, HACS and HA Companion (`ha`) installed from the device'
 The integration writes only `server` and `token` to HA Companion. The display
 fetches its screen from Home Assistant. A sensor exposes the screen text in
 Home Assistant; a refresh button requests an update on the display.
+
+[HA Companion's reference](https://github.com/GrakovNe/perinkpheral-apps/blob/main/apps/ha/README.md)
+describes the screen format and the alternative template-sensor setup.
+Application code belongs in [perinkpheral-apps](https://github.com/GrakovNe/perinkpheral-apps);
+this repository owns the Home Assistant component. The device API is documented in
+[the firmware repository](https://github.com/GrakovNe/perinkpheral/blob/main/docs/api/openapi.yaml).
 
 ## Development
 
