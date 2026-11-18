@@ -93,6 +93,7 @@ check(render("list", {"row_1_entity": "sensor.humidity", "row_1_label": "Humidit
                       "row_1_picture": "drop"}, STATES.get),
       "layout|list\nitem|Humidity||34%")
 check(render("list", {}, STATES.get), "layout|list")
+check(render("hero", {}, STATES.get), "layout|hero")
 
 # Never more than the device keeps, and never half a line.
 many = {"row_%d_entity" % n: "sensor.room" for n in range(1, 9)}

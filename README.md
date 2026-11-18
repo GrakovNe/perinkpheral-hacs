@@ -36,6 +36,7 @@ Rendering tests run with Python 3, without Home Assistant:
 
 ```sh
 python3 tests/test_render.py
+python3 tests/test_config_flow.py
 ```
 
 - `custom_components/perinkpheral/` - integration, configuration flow and screen rendering.

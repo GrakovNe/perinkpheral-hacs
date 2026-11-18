@@ -31,6 +31,8 @@ jobs:
           python-version: "3.13"
       - name: The screens
         run: python3 tests/test_render.py
+      - name: Pairing
+        run: python3 tests/test_config_flow.py
       - name: hassfest
         uses: home-assistant/actions/hassfest@master
 
