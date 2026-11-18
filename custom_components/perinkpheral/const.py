@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: MIT
 """What a screen of the device is made of."""
+from urllib.parse import urlsplit
 
 DOMAIN = "perinkpheral"
 
@@ -53,3 +54,17 @@ def device_of(entry):
 # What the device keeps of a screen, in bytes.
 SCREEN_MAX_BYTES = 512
 NAME_MAX = 23
+
+
+def device_key(address):
+    """The same device written as a host name, a local name or a URL."""
+    address = address.strip()
+    try:
+        parsed = urlsplit(address if "://" in address else "http://" + address)
+        host = (parsed.hostname or "").lower().rstrip(".").removesuffix(".local")
+        port = parsed.port
+    except ValueError:
+        return address.lower().rstrip("/")
+    if port is None or port == (443 if parsed.scheme == "https" else 80):
+        return host
+    return "%s:%d" % (host, port)

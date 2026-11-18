@@ -12,7 +12,7 @@ from homeassistant.helpers.network import NoURLAvailableError, get_url
 
 from .const import (CONF_DEVICE, CONF_LAYOUT, CONF_SECRET, CONF_URL, DOMAIN, LAYOUT_HERO,
                     LAYOUT_LIST, LAYOUT_SINGLE, LAYOUT_TILES, PICTURE_AUTO, PICTURES, SLOTS,
-                    layout_of)
+                    device_key, layout_of)
 from .device import DeviceError, push_settings
 
 CONF_NAME = "name"
@@ -34,12 +34,9 @@ class PerinkpheralConfigFlow(ConfigFlow, domain=DOMAIN):
         self._found_device = str(discovery_info.host)
         # A display that has a screen already - added by hand, or found before -
         # is not offered again, under whichever of its names it was given.
-        names = {self._found_device, discovery_info.hostname.rstrip(".").lower(),
-                 discovery_info.hostname.rstrip(".").lower().removesuffix(".local")}
+        names = {device_key(self._found_device), device_key(discovery_info.hostname)}
         for entry in self._async_current_entries():
-            device = entry.data.get(CONF_DEVICE, "").lower()
-            device = device.split("://")[-1].rstrip("/")
-            if device in names or device.removesuffix(".local") in names:
+            if device_key(entry.data.get(CONF_DEVICE, "")) in names:
                 return self.async_abort(reason="already_configured")
         await self.async_set_unique_id(discovery_info.hostname)
         self._abort_if_unique_id_configured()
@@ -55,9 +52,13 @@ class PerinkpheralConfigFlow(ConfigFlow, domain=DOMAIN):
     async def async_step_user(self, user_input=None):
         errors = {}
         if user_input is not None:
+            device = user_input.get(CONF_DEVICE, "").strip()
+            if device and any(device_key(entry.data.get(CONF_DEVICE, "")) == device_key(device)
+                              for entry in self._async_current_entries()):
+                return self.async_abort(reason="already_configured")
             data = {
                 CONF_LAYOUT: user_input[CONF_LAYOUT],
-                CONF_DEVICE: user_input.get(CONF_DEVICE, "").strip(),
+                CONF_DEVICE: device,
                 CONF_URL: user_input.get(CONF_URL, "").strip(),
                 CONF_SECRET: secrets.token_urlsafe(SECRET_BYTES),
             }

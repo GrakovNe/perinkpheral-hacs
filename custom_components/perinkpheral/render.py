@@ -124,7 +124,9 @@ def render(layout, options, state_of):
             lines.append("column|%s|%s|%s" % (name, picture, joined(value, unit)))
         else:
             lines.append("item|%s|%s|%s" % (name, picture, joined(value, unit)))
-    screen = "\n".join(lines)
+    # An empty successful reply means no new screen to older HA Companion
+    # versions. The explicit layout clears their cached readings too.
+    screen = "\n".join(lines) if lines else "layout|hero"
     # Whole lines only: a screen cut in the middle of one would draw half a value.
     while len(screen.encode("utf-8")) > SCREEN_MAX_BYTES and "\n" in screen:
         screen = screen[:screen.rindex("\n")]
