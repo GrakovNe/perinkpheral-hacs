@@ -32,7 +32,7 @@ this repository owns the Home Assistant component. The device API is documented 
 
 ## Development
 
-Rendering tests run with Python 3, without Home Assistant:
+Rendering and pairing tests run with Python 3, without Home Assistant:
 
 ```sh
 python3 tests/test_render.py
@@ -40,10 +40,10 @@ python3 tests/test_config_flow.py
 ```
 
 - `custom_components/perinkpheral/` - integration, configuration flow and screen rendering.
-- `tests/` - rendering tests.
+- `tests/` - rendering and pairing tests.
 - `hacs.json` - HACS package configuration.
 
-CI runs rendering tests, hassfest and HACS validation on every push.
+CI runs rendering and pairing tests, hassfest and HACS validation on every push.
 Each successful push to `main` releases `perinkpheral.zip` for HACS.
 
 ## License
