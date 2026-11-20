@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/Perinkpheral/perinkpheral/main/assets/mark/mark-on-paper-512.png" width="96" alt="The perINKpheral mark">
+<img src="https://raw.githubusercontent.com/Perinkpheral/perinkpheral-os/main/assets/mark/mark-on-paper-512.png" width="96" alt="The perINKpheral mark">
 
 # perINKpheral for Home Assistant
 
