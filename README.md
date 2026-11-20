@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/GrakovNe/perinkpheral/main/assets/mark/mark-on-paper-512.png" width="96" alt="The perINKpheral mark">
+<img src="https://raw.githubusercontent.com/Perinkpheral/perinkpheral/main/assets/mark/mark-on-paper-512.png" width="96" alt="The perINKpheral mark">
 
 # perINKpheral for Home Assistant
 
@@ -17,7 +17,7 @@ Requires Home Assistant, HACS and HA Companion (`ha`) installed from the device'
 3. Set the display address and the Home Assistant URL reachable from the display.
 4. Configure the layout and entities in the integration options.
 
-[![Add the repository to HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=GrakovNe&repository=perinkpheral-hacs&category=integration)
+[![Add the repository to HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Perinkpheral&repository=perinkpheral-hacs&category=integration)
 [![Add the integration](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=perinkpheral)
 
 The integration writes only `server` and `token` to HA Companion. The display
