@@ -23,7 +23,7 @@ concurrency:
 
 jobs:
   tests:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, perinkpheral]
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
@@ -37,7 +37,7 @@ jobs:
         uses: home-assistant/actions/hassfest@master
 
   hacs:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, perinkpheral]
     steps:
       - name: HACS
         uses: hacs/action@main
@@ -47,7 +47,7 @@ jobs:
 
   build:
     needs: [tests, hacs]
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, perinkpheral]
     steps:
       - uses: actions/checkout@v5
         with:
